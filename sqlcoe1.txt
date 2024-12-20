@@ -1,124 +1,285 @@
+mysql> select *from student;
++------------+-----------------+-------+--------+----------------+--------+
+| student_id | student_name    | marks | city   | mobile         | gender |
++------------+-----------------+-------+--------+----------------+--------+
+|          1 | John Doe        | 85.50 | BGLR   | +91-7012345678 | Male   |
+|          2 | Jane Smith      | 78.25 | HYD    | +91-8098765432 | Female |
+|          3 | Alex Johnson    | 90.40 | Mumbai | +91-9223344556 | Other  |
+|          4 | Emily Davis     | 88.30 | BGLR   | +91-9876543210 | Female |
+|          5 | Michael Brown   | 82.20 | HYD    | +91-7254789623 | Male   |
+|          6 | Sophia Wilson   | 94.60 | Mumbai | +91-8123456789 | Female |
+|          7 | David Lee       | 76.50 | Pune   | +91-9012345678 | Male   |
+|          8 | Olivia Martinez | 69.80 | BGLR   | +91-7771234567 | Female |
+|          9 | James Garcia    | 89.10 | Mumbai | +91-8432123456 | Male   |
+|         10 | Ava Rodriguez   | 91.00 | HYD    | +91-8145671234 | Female |
++------------+-----------------+-------+--------+----------------+--------+
+10 rows in set (0.00 sec)
 1. display student details whose city is pune.
- select * from student where city='pune';
+mysql> select *from student where city='pune';
++------------+--------------+-------+------+----------------+--------+
+| student_id | student_name | marks | city | mobile         | gender |
++------------+--------------+-------+------+----------------+--------+
+|          7 | David Lee    | 76.50 | Pune | +91-9012345678 | Male   |
++------------+--------------+-------+------+----------------+--------+
+1 row in set (0.00 sec)
 
-2.display std details whose city is hyd or pune.
-select * from student where city='hyd'or city='pune';
+mysql> select *from student where city='hyd' or city='pune';
++------------+---------------+-------+------+----------------+--------+
+| student_id | student_name  | marks | city | mobile         | gender |
++------------+---------------+-------+------+----------------+--------+
+|          2 | Jane Smith    | 78.25 | HYD  | +91-8098765432 | Female |
+|          5 | Michael Brown | 82.20 | HYD  | +91-7254789623 | Male   |
+|          7 | David Lee     | 76.50 | Pune | +91-9012345678 | Male   |
+|         10 | Ava Rodriguez | 91.00 | HYD  | +91-8145671234 | Female |
++------------+---------------+-------+------+----------------+--------+
+4 rows in set (0.00 sec)
 
-3.display female stds from hyd and male stds from pune and all the stds from wrgl.
-select * from student where (gender='female'and city='hyd') or (gender='male' and city='pune') or city='wrgl';
+mysql> select *from student where (gender='feamle'and city='hyd')and (gender='male'and city='pune');
+Empty set (0.00 sec)
 
-4.display std details
-	-from hyd city,male stds who scored more than 70 and female who score more than 50
-	select * from student where (city='hyd'and gender='male' and marks>70) or (city='hyd' and gender='female' and marks>50);
-	-from pune only male stds
-	select * from student where city='pune' and gender='male';
+mysql> select *from student where (gender='female'and city='hyd') or (gender='male'and city='pune')or city='bglr';
++------------+-----------------+-------+------+----------------+--------+
+| student_id | student_name    | marks | city | mobile         | gender |
++------------+-----------------+-------+------+----------------+--------+
+|          1 | John Doe        | 85.50 | BGLR | +91-7012345678 | Male   |
+|          2 | Jane Smith      | 78.25 | HYD  | +91-8098765432 | Female |
+|          4 | Emily Davis     | 88.30 | BGLR | +91-9876543210 | Female |
+|          7 | David Lee       | 76.50 | Pune | +91-9012345678 | Male   |
+|          8 | Olivia Martinez | 69.80 | BGLR | +91-7771234567 | Female |
+|         10 | Ava Rodriguez   | 91.00 | HYD  | +91-8145671234 | Female |
++------------+-----------------+-------+------+----------------+--------+
+6 rows in set (0.00 sec)
 
-5.display std details who score between 50 and 80 and city should be hyd or wrgl
- select * from student where 50<marks<80 and (city='hyd' or city='wrgl');
+mysql> select max(marks) as marks from student;
++-------+
+| marks |
++-------+
+| 94.60 |
++-------+
+1 row in set (0.00 sec)
 
-6.display std details whose name starts with s and ends with a
- select * from student where sname='$s' and sname='^a';
- select * frpm student where sname like "s%a";
+mysql> select student_name from student where marks between 50 and 80 and city='hyd' or city='bglr';
++-----------------+
+| student_name    |
++-----------------+
+| John Doe        |
+| Jane Smith      |
+| Emily Davis     |
+| Olivia Martinez |
++-----------------+
+4 rows in set (0.00 sec)
 
-7.display number of stds in each city
-select city,count(*) as number_of_students
-    -> from student
-    -> group by city
-    -> ;
+mysql> select student_name,city,gender from student where marks between 50 and 80 and city='hyd' or city='bglr';
++-----------------+------+--------+
+| student_name    | city | gender |
++-----------------+------+--------+
+| John Doe        | BGLR | Male   |
+| Jane Smith      | HYD  | Female |
+| Emily Davis     | BGLR | Female |
+| Olivia Martinez | BGLR | Female |
++-----------------+------+--------+
+4 rows in set (0.00 sec)
 
-8.best city in education based on score
- select city from student group by city
-    -> order by avg(marks)
-    -> desc
-    -> limit 1;
+mysql> select student_name from student where student_name like 's%';
++---------------+
+| student_name  |
++---------------+
+| Sophia Wilson |
++---------------+
+1 row in set (0.00 sec)
 
-9.top score in each city
- select city, max(marks) from student group by city;
+mysql> select student_name from student where city='hyd' and ((gender='male' and marks>70) or (gender='female' and marks >50));
++---------------+
+| student_name  |
++---------------+
+| Jane Smith    |
+| Michael Brown |
+| Ava Rodriguez |
++---------------+
+3 rows in set (0.00 sec)
 
-10.display topper details in hyd
-select * from student where marks=(select max(marks) from student) and city='hyd';
+mysql> select student_name from student where city='pune' and gender='male';
++--------------+
+| student_name |
++--------------+
+| David Lee    |
++--------------+
+1 row in set (0.00 sec)
 
+mysql> select student_name from student where city!='bglr';
++---------------+
+| student_name  |
++---------------+
+| Jane Smith    |
+| Alex Johnson  |
+| Michael Brown |
+| Sophia Wilson |
+| David Lee     |
+| James Garcia  |
+| Ava Rodriguez |
++---------------+
+7 rows in set (0.00 sec)
 
+mysql> SELECT city, COUNT(*) AS number_of_students
+    -> FROM student
+    -> GROUP BY city;
++--------+--------------------+
+| city   | number_of_students |
++--------+--------------------+
+| BGLR   |                  3 |
+| HYD    |                  3 |
+| Mumbai |                  3 |
+| Pune   |                  1 |
++--------+--------------------+
+4 rows in set (0.00 sec)
 
+mysql> SELECT city, MAX(marks) AS top_score
+    -> FROM student
+    -> GROUP BY city;
++--------+-----------+
+| city   | top_score |
++--------+-----------+
+| BGLR   |     88.30 |
+| HYD    |     91.00 |
+| Mumbai |     94.60 |
+| Pune   |     76.50 |
++--------+-----------+
+4 rows in set (0.00 sec)
 
+mysql> SELECT student_name, marks, city
+    -> FROM student
+    -> WHERE city = 'HYD'
+    -> ORDER BY marks DESC
+    -> LIMIT 1;
++---------------+-------+------+
+| student_name  | marks | city |
++---------------+-------+------+
+| Ava Rodriguez | 91.00 | HYD  |
++---------------+-------+------+
+1 row in set (0.00 sec)
 
+mysql> SELECT city, AVG(marks) AS avg_marks
+    -> FROM student
+    -> GROUP BY city
+    -> ORDER BY avg_marks DESC
+    -> LIMIT 1;
++--------+-----------+
+| city   | avg_marks |
++--------+-----------+
+| Mumbai | 91.366667 |
++--------+-----------+
+1 row in set (0.00 sec)
 mysql> create database retail;
 Query OK, 1 row affected (0.00 sec)
 
 mysql> use retail;
 Database changed
-mysql> create table salespeople(snum int not null,sname varchar(30) not null,city varchar(30) not null,comm decimal(4,2) not null,primary key(snum));
-Query OK, 0 rows affected (0.01 sec)
-
-mysql> insert into salespeople values(1001,'Peel','London',0.12);
-Query OK, 1 row affected (0.00 sec)
-
-mysql> insert into salespeople values(1002,'Serres','San Jose',0.13);
-Query OK, 1 row affected (0.00 sec)
-
-mysql> insert into salespeople values(1003,'AxelRod','New York',0.10);
-Query OK, 1 row affected (0.00 sec)
-
-mysql> insert into salespeople values(1004,'Motika','London',0.11);
-Query OK, 1 row affected (0.00 sec)
-
-mysql> insert into salespeople values(1005,'Fran','London',0.26);
-Query OK, 1 row affected (0.00 sec)
-
-mysql> insert into salespeople values(1007,'Rifkin','Barcelona',0.15);
-Query OK, 1 row affected (0.00 sec)
-
-mysql> select * from salespeople;
-+------+---------+-----------+------+
-| snum | sname   | city      | comm |
-+------+---------+-----------+------+
-| 1001 | Peel    | London    | 0.12 |
-| 1002 | Serres  | San Jose  | 0.13 |
-| 1003 | AxelRod | New York  | 0.10 |
-| 1004 | Motika  | London    | 0.11 |
-| 1005 | Fran    | London    | 0.26 |
-| 1007 | Rifkin  | Barcelona | 0.15 |
-+------+---------+-----------+------+
-6 rows in set (0.00 sec)
-
-mysql> create table customer(cnum int not null,cname varchar(30) not null,city varchar(30) not null,rating int not null,snum int not null,primary key(cnum),foreign key(snum) references salespeople(snum));
-Query OK, 0 rows affected (0.01 sec)
-
-mysql> insert into customer values(2001,'Hoffman','London',100,1001);
-Query OK, 1 row affected (0.00 sec)
-
-mysql> insert into customer values(2002,'Giovanni','Rome',200,1003);
-Query OK, 1 row affected (0.01 sec)
-
-mysql> insert into customer values(2003,'Liu','San Jose',200,1002);
-Query OK, 1 row affected (0.00 sec)
-
-mysql> insert into customer values(2004,'Grass','Berlin',300,1002);
-Query OK, 1 row affected (0.00 sec)
-
-mysql> insert into customer values(2006,'Clemens','London',100,1001);
-Query OK, 1 row affected (0.00 sec)
-
-mysql> insert into customer values(2008,'Cisneros','San Jose',300,1007);
-Query OK, 1 row affected (0.00 sec)
-
-mysql> insert into customer values(2007,'Pereira','Rome',100,1004);
-Query OK, 1 row affected (0.00 sec)
-
-mysql> select * from customer;
+mysql> select *from customer;
 +------+----------+----------+--------+------+
 | cnum | cname    | city     | rating | snum |
 +------+----------+----------+--------+------+
-| 2001 | Hoffman  | London   |    100 | 1001 |
-| 2002 | Giovanni | Rome     |    200 | 1003 |
-| 2003 | Liu      | San Jose |    200 | 1002 |
-| 2004 | Grass    | Berlin   |    300 | 1002 |
-| 2006 | Clemens  | London   |    100 | 1001 |
-| 2007 | Pereira  | Rome     |    100 | 1004 |
-| 2008 | Cisneros | San Jose |    300 | 1007 |
+| 2001 | hoffman  | london   |    100 | 1001 |
+| 2002 | giovanni | rome     |    200 | 1003 |
+| 2003 | san jose | rome     |    200 | 1002 |
+| 2004 | liu      | berlin   |    300 | 1002 |
+| 2006 | clemens  | london   |    100 | 1001 |
+| 2007 | pereira  | rome     |    100 | 1004 |
+| 2008 | cisneros | san jose |    300 | 1007 |
 +------+----------+----------+--------+------+
 7 rows in set (0.00 sec)
 
+mysql> select *from salesperson;
++------+----------+-----------+------+
+| snum | sname    | city      | comm |
++------+----------+-----------+------+
+| 1001 | peel     | london    | 0.12 |
+| 1002 | serres   | san jose  | 0.13 |
+| 1003 | alerodss | new york  | 0.10 |
+| 1004 | motika   | london    | 0.11 |
+| 1005 | fran     | barcelona | 0.26 |
+| 1007 | rifkin   | london    | 0.15 |
++------+----------+-----------+------+
+6 rows in set (0.00 sec)
 
+mysql> select s.sname ,count(c.cnum) as no_of_customer
+    -> from salesperson s
+    -> inner join customer c on s.snum=c.cnum
+    -> group by s.sname;
+Empty set (0.00 sec)
 
-	
+mysql> SELECT s.sname, COUNT(c.cnum) AS num_customers
+    -> FROM salesperson s
+    -> INNER JOIN customer c ON s.snum = c.snum
+    -> GROUP BY s.sname;
++----------+---------------+
+| sname    | num_customers |
++----------+---------------+
+| alerodss |             1 |
+| motika   |             1 |
+| peel     |             2 |
+| rifkin   |             1 |
+| serres   |             2 |
++----------+---------------+
+5 rows in set (0.00 sec)
+
+mysql> select s.sname ,avg(rating) as avg_rating
+    -> from salesperson s
+    -> inner join customer c on s.snum=c.snum
+    -> group by s.sname
+    -> order by avg_rating desc
+    -> limit 1;
++--------+------------+
+| sname  | avg_rating |
++--------+------------+
+| rifkin |   300.0000 |
++--------+------------+
+1 row in set (0.00 sec)
+
+mysql> select s.sname ,avg(rating) as avg_rating
+    -> FROM salesperson s
+    -> inner join customer c on s.snum=c.cnum
+    -> group by s.sname
+    -> order by avg_rating asc
+    -> limit 1;
+Empty set (0.00 sec)
+
+mysql> SELECT s.sname, SUM(c.rating) AS total_rating
+    -> FROM salesperson s
+    -> INNER JOIN customer c ON s.snum = c.snum
+    -> GROUP BY s.sname
+    -> ORDER BY total_rating ASC
+    -> LIMIT 1;
++--------+--------------+
+| sname  | total_rating |
++--------+--------------+
+| motika |          100 |
++--------+--------------+
+1 row in set (0.00 sec)
+
+mysql> select s.sname
+    -> from salesperson s
+    -> inner join customer c on s.snum=c.snum
+    -> where city;
+ERROR 1052 (23000): Column 'city' in where clause is ambiguous
+mysql> SELECT s.sname, s.city AS salesperson_city
+    -> FROM salesperson s
+    -> JOIN customer c ON s.snum = c.snum
+    -> GROUP BY s.sname, s.city
+    -> HAVING COUNT(DISTINCT c.city) = 1;
++----------+------------------+
+| sname    | salesperson_city |
++----------+------------------+
+| alerodss | new york         |
+| motika   | london           |
+| peel     | london           |
+| rifkin   | london           |
++----------+------------------+
+4 rows in set (0.00 sec)
+
+mysql> select cname from customer where city='san jose' and rating>200;
++----------+
+| cname    |
++----------+
+| cisneros |
++----------+
+1 row in set (0.00 sec)
